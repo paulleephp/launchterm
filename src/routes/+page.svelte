@@ -130,7 +130,7 @@
         role="application"
         aria-label="Terminal output"
     >
-        {#each lines as line}
+        {#each lines as line, index (index)}
             <div class="line {line.tone}">{line.text || '\u00a0'}</div>
         {/each}
         <form class="prompt-line" onsubmit={runCommand}>
