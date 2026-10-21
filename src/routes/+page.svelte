@@ -51,7 +51,7 @@
     function runCommand(event: SubmitEvent) {
         event.preventDefault();
         const command = input.trim();
-        lines = [...lines, { text: `guest@xterm:${cwd}$ ${command}`, tone: 'command' }];
+        lines = [...lines, { text: `guest@term:${cwd}$ ${command}`, tone: 'command' }];
         const [name, ...args] = command.split(/\s+/);
 
         if (name === 'clear') {
@@ -120,7 +120,7 @@
 <main class="terminal-shell" role="application" aria-label="Interactive terminal">
     <div class="window-bar" aria-hidden="true">
         <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
-        <span class="window-title">guest@xterm: ~</span>
+        <span class="window-title">guest@term: ~</span>
     </div>
     <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_noninteractive_element_interactions -->
     <div
@@ -134,7 +134,7 @@
             <div class="line {line.tone}">{line.text || '\u00a0'}</div>
         {/each}
         <form class="prompt-line" onsubmit={runCommand}>
-            <span class="prompt">guest@xterm:~$</span>
+            <span class="prompt">guest@term:~$</span>
             <input
                 bind:this={inputField}
                 bind:value={input}
