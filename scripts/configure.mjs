@@ -21,7 +21,7 @@ async function main() {
     const name = await ask('Your name', current.name);
     const linkedin = await ask('LinkedIn URL', current.linkedin);
     const github = await ask('GitHub URL', current.github);
-    const about = await ask('About text', current.about);
+    const about = await ask('Introduction for about.txt', current.about);
 
     const config = JSON.stringify({ name, linkedin, github, about }, null, '\t') + '\n';
 
