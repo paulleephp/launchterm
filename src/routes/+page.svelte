@@ -1,12 +1,21 @@
 <script lang="ts">
     import { onMount } from 'svelte';
-    import config from '../lib/config.json';
-
     const terminalConfig = {
-        ...config,
-        githubLabel: config.github.replace(/^https?:\/\//, '').replace(/\/$/, ''),
-        linkedinLabel: config.linkedin.replace(/^https?:\/\//, '').replace(/\/$/, '')
+        name: import.meta.env.VITE_TERMINAL_NAME || 'Your Name',
+        linkedin:
+            import.meta.env.VITE_TERMINAL_LINKEDIN || 'https://www.linkedin.com/in/your-profile',
+        github: import.meta.env.VITE_TERMINAL_GITHUB || 'https://github.com/your-username',
+        email: import.meta.env.VITE_TERMINAL_EMAIL || 'you@example.com',
+        about: import.meta.env.VITE_TERMINAL_ABOUT || 'A short introduction about you.',
+        linkedinLabel: '',
+        githubLabel: ''
     };
+    terminalConfig.githubLabel = terminalConfig.github
+        .replace(/^https?:\/\//, '')
+        .replace(/\/$/, '');
+    terminalConfig.linkedinLabel = terminalConfig.linkedin
+        .replace(/^https?:\/\//, '')
+        .replace(/\/$/, '');
 
     let input = $state('');
     let cwd = $state('~');
@@ -85,6 +94,7 @@
                 { text: '  cat      Print a file from the virtual filesystem', tone: '' },
                 { text: '  cd       Change virtual directory', tone: '' },
                 { text: '  clear    Clear the terminal', tone: '' },
+                { text: '  email    Open an email to me', tone: '' },
                 { text: '  github   Visit my GitHub profile', tone: '' },
                 { text: '  help     Show this help message', tone: '' },
                 { text: '  linkedin Visit my LinkedIn profile', tone: '' },
@@ -96,6 +106,12 @@
         } else if (name === 'linkedin') {
             window.open(terminalConfig.linkedin, '_blank', 'noopener,noreferrer');
             lines = [...lines, { text: `Opening ${terminalConfig.linkedinLabel} ...`, tone: '' }];
+        } else if (name === 'email') {
+            window.location.href = `mailto:${terminalConfig.email}`;
+            lines = [
+                ...lines,
+                { text: `Opening mail client for ${terminalConfig.email} ...`, tone: '' }
+            ];
         } else if (name === 'github') {
             window.open(terminalConfig.github, '_blank', 'noopener,noreferrer');
             lines = [...lines, { text: `Opening ${terminalConfig.githubLabel} ...`, tone: '' }];
