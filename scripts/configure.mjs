@@ -11,6 +11,23 @@ const current = {
     about: "I'm a fullstack developer who builds thoughtful, reliable web applications from front to back."
 };
 
+const serializeEnvValue = (value) => {
+    const quote = ["'", '`', '"'].find(
+        (character) => !value.includes(character) && (character !== '"' || !/\\[nr]/.test(value))
+    );
+    const escaped = value.replaceAll('$', '\\$');
+
+    if (quote) {
+        return `${quote}${escaped}${quote}`;
+    }
+
+    if (value.includes('#') || /[\r\n]/.test(value)) {
+        throw new Error('Unable to safely serialize configuration value');
+    }
+
+    return escaped;
+};
+
 const rl = createInterface({ input, output });
 const ask = async (label, fallback) => {
     const answer = (await rl.question(`${label} [${fallback}]: `)).trim();
@@ -27,11 +44,11 @@ async function main() {
 
     const config =
         [
-            `VITE_TERMINAL_NAME=${JSON.stringify(name)}`,
-            `VITE_TERMINAL_LINKEDIN=${JSON.stringify(linkedin)}`,
-            `VITE_TERMINAL_GITHUB=${JSON.stringify(github)}`,
-            `VITE_TERMINAL_EMAIL=${JSON.stringify(email)}`,
-            `VITE_TERMINAL_ABOUT=${JSON.stringify(about)}`
+            `VITE_TERMINAL_NAME=${serializeEnvValue(name)}`,
+            `VITE_TERMINAL_LINKEDIN=${serializeEnvValue(linkedin)}`,
+            `VITE_TERMINAL_GITHUB=${serializeEnvValue(github)}`,
+            `VITE_TERMINAL_EMAIL=${serializeEnvValue(email)}`,
+            `VITE_TERMINAL_ABOUT=${serializeEnvValue(about)}`
         ].join('\n') + '\n';
 
     await writeFile(resolve('.env'), config);
