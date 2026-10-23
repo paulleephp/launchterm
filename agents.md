@@ -7,7 +7,7 @@ This repository is a SvelteKit landing page that presents a terminal-only person
 ## Ground rules
 
 - Inspect the existing implementation before changing it.
-- Keep personal information out of tracked source files. Personal values belong in the ignored `src/lib/config.json`; update `src/lib/config.example.json` when the configuration shape changes.
+- Keep personal information out of tracked source files. Personal values belong in the ignored `.env`; update `.env.example` when the configuration shape changes.
 - Never introduce a real server shell or process execution for terminal commands. The browser terminal must remain a virtual, allowlisted filesystem.
 - Do not add commands that execute arbitrary JavaScript, spawn processes, access the host filesystem, make arbitrary network requests, or evaluate user input.
 - Keep external links fixed by configuration and open only in response to explicit user commands.
@@ -36,4 +36,4 @@ Personal configuration is generated locally with:
 npm run configure
 ```
 
-This writes `src/lib/config.json`, which is intentionally gitignored. A new checkout should start from `src/lib/config.example.json` or run the configure command before building.
+This writes `.env`, which is intentionally gitignored. A new checkout should copy `.env.example` or run the configure command before building. Netlify should receive the same `VITE_TERMINAL_*` values through its environment settings.

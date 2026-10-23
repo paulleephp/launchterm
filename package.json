@@ -6,6 +6,10 @@
     "scripts": {
         "dev": "vite dev",
         "configure": "node scripts/configure.mjs",
+        "netlify:login": "netlify login",
+        "netlify:build": "netlify build",
+        "netlify:deploy": "netlify deploy --build",
+        "netlify:deploy:prod": "netlify deploy --build --prod",
         "build": "vite build",
         "preview": "vite preview",
         "prepare": "svelte-kit sync || echo ''",
@@ -17,6 +21,7 @@
     "devDependencies": {
         "@eslint/js": "^10.0.1",
         "@sveltejs/adapter-auto": "^8.0.0",
+        "@sveltejs/adapter-static": "^4.0.0",
         "@sveltejs/kit": "^3.0.0",
         "@sveltejs/vite-plugin-svelte": "^7.2.0",
         "@types/node": "^24",
@@ -24,6 +29,7 @@
         "eslint-config-prettier": "^10.1.8",
         "eslint-plugin-svelte": "^3.19.0",
         "globals": "^17.6.0",
+        "netlify-cli": "^27.14.1",
         "prettier": "^3.8.3",
         "prettier-plugin-svelte": "^4.1.0",
         "svelte": "^5.57.1",

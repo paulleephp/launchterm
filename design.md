@@ -11,31 +11,30 @@
 
 The terminal is a presentation layer over a deliberately tiny virtual machine:
 
-- `src/routes/+page.svelte` owns input, output history, focus, and command dispatch.
+- `src/routes/+page.svelte` owns input, output history, focus, command dispatch, and environment-backed personal configuration.
 - The virtual filesystem is an in-memory `Record<string, string>`.
 - Commands are parsed into a command name and arguments, then handled by explicit branches.
 - Unknown commands return an error; they are never passed to a shell or evaluator.
 - `ls`, `cat`, `pwd`, and `cd` operate only on the virtual filesystem and virtual home directory.
-- Social commands use only URLs from `src/lib/config.json`.
+- Social and email commands use only configured `VITE_TERMINAL_*` values. Email navigates only to the configured `mailto:` address.
 
 ## Personal configuration schema
 
-`src/lib/config.json` uses this shape:
+Personal values are supplied through `.env` locally and Netlify environment variables in deployment:
 
-```json
-{
-    "name": "Your Name",
-    "linkedin": "https://www.linkedin.com/in/your-profile",
-    "github": "https://github.com/your-username",
-    "about": "A short introduction about you."
-}
+```env
+VITE_TERMINAL_NAME="Your Name"
+VITE_TERMINAL_LINKEDIN="https://www.linkedin.com/in/your-profile"
+VITE_TERMINAL_GITHUB="https://github.com/your-username"
+VITE_TERMINAL_EMAIL="you@example.com"
+VITE_TERMINAL_ABOUT="A short introduction about you."
 ```
 
 Display labels are derived from the configured URLs at runtime. Do not duplicate personal URLs in the component.
 
 ## Configuration command
 
-`scripts/configure.mjs` uses Node's standard readline API and writes only the four JSON fields above. It is intentionally a local setup utility and does not make network requests.
+`scripts/configure.mjs` uses Node's standard readline API and writes the five `VITE_TERMINAL_*` values above to the local `.env` file. It is intentionally a local setup utility and does not make network requests.
 
 ## Safety guardrails
 
