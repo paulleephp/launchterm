@@ -123,8 +123,17 @@
         input = '';
         requestAnimationFrame(() => {
             terminal?.scrollTo(0, terminal.scrollHeight);
-            inputField?.focus();
+            inputField?.focus({ preventScroll: true });
+            inputField?.scrollIntoView({ block: 'end' });
         });
+    }
+
+    // Some mobile keypads report Return as a line-break input event instead of a form submit.
+    function handleBeforeInput(event: InputEvent) {
+        if (event.inputType === 'insertLineBreak' || event.inputType === 'insertParagraph') {
+            event.preventDefault();
+            inputField?.form?.requestSubmit();
+        }
     }
 </script>
 
@@ -154,6 +163,8 @@
             <input
                 bind:this={inputField}
                 bind:value={input}
+                onbeforeinput={handleBeforeInput}
+                enterkeyhint="send"
                 aria-label="Terminal input"
                 autocomplete="off"
                 autocapitalize="off"
@@ -181,6 +192,7 @@
     }
     .terminal-shell {
         height: 100vh;
+        height: 100dvh;
         width: 100vw;
         background: #0d1117;
         color: #d6deeb;
